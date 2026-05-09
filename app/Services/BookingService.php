@@ -71,7 +71,8 @@ class BookingService
                 'end_date'           => $endDate->toDateString(),
                 'total_price'        => $totalPrice,
                 'status'             => OrderStatus::PENDING,
-                'payment_method'     => $data['payment_method'],
+                'payment_method' => $data['payment_method'] ?? PaymentMethod::GATEWAY,
+                // 'payment_method'     => $data['payment_method'],
                 'payment_timeout_at' => $timeoutAt,
             ]);
 
