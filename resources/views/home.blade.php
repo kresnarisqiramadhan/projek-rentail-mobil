@@ -15,12 +15,12 @@
             @endforeach
 
             <!-- View Full Fleet Card -->
-            <div class="group relative bg-surface-container-lowest border border-surface-variant rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-300 cursor-pointer">
+            <a href="{{ route('vehicles') }}" class="group relative bg-surface-container-lowest border border-surface-variant rounded-xl overflow-hidden hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] transition-all duration-300 cursor-pointer block">
                 <div class="h-60 overflow-hidden bg-zinc-100 flex items-center justify-center">
                     <span class="font-headline-md text-headline-md text-primary">View Full Fleet</span>
                     <span class="material-symbols-outlined ml-2 text-primary">arrow_forward</span>
                 </div>
-            </div>
+            </a>
         </div>
     </section>
 </x-layout>
