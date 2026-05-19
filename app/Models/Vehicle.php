@@ -14,10 +14,14 @@ class Vehicle extends Model
 
     protected $fillable = [
         'name',
+        'brand',
+        'model',
+        'year',
         'type',
         'plate_number',
         'price_per_day',
         'condition',
+        'seats',
         'avg_rating',
         'is_active',
     ];
@@ -28,10 +32,9 @@ class Vehicle extends Model
             'price_per_day' => 'decimal:2',
             'avg_rating'    => 'decimal:2',
             'is_active'     => 'boolean',
+            'seats'         => 'integer',
         ];
     }
-
-    // ── Relations ──────────────────────────────────────────
 
     public function photos(): HasMany
     {
@@ -48,16 +51,19 @@ class Vehicle extends Model
         return $this->hasMany(Rating::class);
     }
 
-    // ── Scopes ────────────────────────────────────────────
-
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    public function scopeFilterByType(Builder $query, ?string $type): Builder
+    public function scopeFilterByBrand(Builder $query, ?array $brands): Builder
     {
-        return $type ? $query->where('type', $type) : $query;
+        return $brands ? $query->whereIn('brand', $brands) : $query;
+    }
+
+    public function scopeFilterBySeats(Builder $query, ?array $seats): Builder
+    {
+        return $seats ? $query->whereIn('seats', $seats) : $query;
     }
 
     public function scopeFilterByPriceRange(Builder $query, ?float $min, ?float $max): Builder
@@ -71,19 +77,17 @@ class Vehicle extends Model
         return $query;
     }
 
-    // ── Helpers ────────────────────────────────────────────
+    public function scopeAvailable(Builder $query): Builder
+    {
+        return $query->whereDoesntHave('orders', function ($q) {
+            $q->whereIn('status', array_map(fn($s) => $s->value, OrderStatus::blockingDeletion()));
+        });
+    }
 
-    /**
-     * Check if vehicle has any active booking in the given date range.
-     * Used for availability check (VR-02).
-     */
     public function hasActiveBookingInRange(\Carbon\Carbon $startDate, \Carbon\Carbon $endDate, ?int $excludeOrderId = null): bool
     {
         return $this->orders()
-            ->whereIn('status', array_map(
-                fn($s) => $s->value,
-                OrderStatus::blockingDeletion()
-            ))
+            ->whereIn('status', array_map(fn($s) => $s->value, OrderStatus::blockingDeletion()))
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->where('start_date', '<', $endDate)
                       ->where('end_date', '>', $startDate);
@@ -92,22 +96,13 @@ class Vehicle extends Model
             ->exists();
     }
 
-    /**
-     * Whether this vehicle can be deleted (VR-08)
-     */
     public function canBeDeleted(): bool
     {
         return !$this->orders()
-            ->whereIn('status', array_map(
-                fn($s) => $s->value,
-                OrderStatus::blockingDeletion()
-            ))
+            ->whereIn('status', array_map(fn($s) => $s->value, OrderStatus::blockingDeletion()))
             ->exists();
     }
 
-    /**
-     * Recalculate and save avg_rating from ratings table
-     */
     public function recalculateAvgRating(): void
     {
         $avg = $this->ratings()->avg('score') ?? 0;

@@ -7,15 +7,15 @@
     <div class="absolute inset-0 z-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
     <!-- Content -->
     <div class="relative z-10 text-center px-6 max-w-4xl mx-auto mt-20">
-        <h1 class="font-display-xl text-display-xl text-white mb-6 drop-shadow-md">Drive Perfection.</h1>
-        <p class="font-body-lg text-body-lg text-white/90 mb-12 max-w-2xl mx-auto">Experience the world's most refined vehicles. Curated for those who demand excellence in every detail.</p>
+        <h1 class="font-display-xl text-display-xl text-white mb-6 drop-shadow-md">{{ __('Drive Perfection.') }}</h1>
+        <p class="font-body-lg text-body-lg text-white/90 mb-12 max-w-2xl mx-auto">{{ __("Experience the world's most refined vehicles. Curated for those who demand excellence in every detail.") }}</p>
         
         <!-- Search/Filter Bar -->
         <div class="bg-white/95 backdrop-blur-md rounded-full p-2 flex flex-col md:flex-row items-center shadow-2xl max-w-3xl mx-auto border border-white/20">
             <div class="flex-1 flex items-center px-6 py-3 w-full md:w-auto border-b md:border-b-0 md:border-r border-zinc-200">
                 <span class="material-symbols-outlined text-zinc-400 mr-3">location_on</span>
                 <div class="flex flex-col text-left">
-                    <span class="font-label-md text-label-md text-zinc-500">Location</span>
+                    <span class="font-label-md text-label-md text-zinc-500">{{ __('Location') }}</span>
                     <input class="bg-transparent border-none p-0 focus:ring-0 font-body-md text-body-md text-zinc-900 placeholder-zinc-400 w-full" placeholder="Where to?" type="text"/>
                 </div>
             </div>
@@ -23,7 +23,7 @@
             <div class="flex-1 flex items-center px-6 py-3 w-full md:w-auto border-b md:border-b-0 md:border-r border-zinc-200">
                 <span class="material-symbols-outlined text-zinc-400 mr-3">calendar_month</span>
                 <div class="flex flex-col text-left">
-                    <span class="font-label-md text-label-md text-zinc-500">Dates</span>
+                    <span class="font-label-md text-label-md text-zinc-500">{{ __('Dates') }}</span>
                     <input class="bg-transparent border-none p-0 focus:ring-0 font-body-md text-body-md text-zinc-900 placeholder-zinc-400 w-full" placeholder="Add dates" type="text"/>
                 </div>
             </div>

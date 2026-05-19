@@ -7,7 +7,6 @@ use App\Enums\TransactionActor;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Models\Order;
-use App\Models\User;
 use App\Notifications\OrderStatusChangedNotification;
 use App\Notifications\PaymentConfirmedNotification;
 use App\Notifications\PaymentRejectedNotification;
@@ -20,10 +19,6 @@ class PaymentService
         private readonly OrderStateMachine $stateMachine
     ) {}
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-D01: Handle Payment Gateway Callback (webhook)
-    // API-01: HMAC signature already validated by middleware before reaching here
-    // ──────────────────────────────────────────────────────────────────────────
     public function handleGatewayCallback(array $payload): void
     {
         DB::transaction(function () use ($payload) {
@@ -42,9 +37,6 @@ class PaymentService
         });
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-D04: Admin Verify Manual Payment (approve)
-    // ──────────────────────────────────────────────────────────────────────────
     public function adminApprovePayment(Order $order): void
     {
         if ($order->status !== OrderStatus::PENDING_VERIFICATION) {
@@ -57,10 +49,6 @@ class PaymentService
         });
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-D04: Admin Reject Manual Payment
-    // Status returns to PENDING so customer can re-upload (SRS §3.9)
-    // ──────────────────────────────────────────────────────────────────────────
     public function adminRejectPayment(Order $order, string $reason): void
     {
         if ($order->status !== OrderStatus::PENDING_VERIFICATION) {
@@ -68,15 +56,13 @@ class PaymentService
         }
 
         DB::transaction(function () use ($order, $reason) {
-            // PENDING_VERIFICATION → PENDING (admin rejects, customer can re-upload)
             $this->stateMachine->assertCanTransition($order->status, OrderStatus::PENDING);
 
             $order->update([
                 'status'        => OrderStatus::PENDING,
-                'payment_proof' => null, // clear old proof
+                'payment_proof' => null,
             ]);
 
-            // Audit log
             $order->transactions()->create([
                 'amount' => $order->total_price,
                 'type'   => TransactionType::PAYMENT->value,
@@ -92,10 +78,7 @@ class PaymentService
         });
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // Admin: Process Refund (REFUND_REQUESTED → REFUNDED)
-    // ──────────────────────────────────────────────────────────────────────────
-    public function processRefund(Order $order, User $admin): void
+    public function processRefund(Order $order): void
     {
         if ($order->status !== OrderStatus::REFUND_REQUESTED) {
             throw new \RuntimeException('Pesanan tidak dalam status pengajuan refund.');
@@ -106,7 +89,6 @@ class PaymentService
 
             $order->update(['status' => OrderStatus::REFUNDED]);
 
-            // Audit log — refund transaction
             $order->transactions()->create([
                 'amount' => $order->total_price,
                 'type'   => TransactionType::REFUND->value,
@@ -122,12 +104,15 @@ class PaymentService
         });
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // Private: Shared logic for confirming payment (gateway OR admin manual)
-    // ──────────────────────────────────────────────────────────────────────────
+    public function validateGatewaySignature(string $payload, string $receivedSignature): bool
+    {
+        $secret   = config('services.payment_gateway.webhook_secret');
+        $expected = hash_hmac('sha256', $payload, $secret);
+        return hash_equals($expected, $receivedSignature);
+    }
+
     private function confirmPayment(Order $order, ?string $gatewayRef, TransactionActor $actor): void
     {
-        // Idempotency: if already PAID, skip (handles duplicate callbacks)
         if ($order->status === OrderStatus::PAID) {
             Log::warning('Duplicate payment callback ignored', ['order_id' => $order->id]);
             return;
@@ -137,7 +122,6 @@ class PaymentService
 
         $order->update(['status' => OrderStatus::PAID]);
 
-        // Immutable audit log (FR-D05)
         $order->transactions()->create([
             'amount'      => $order->total_price,
             'type'        => TransactionType::PAYMENT->value,
@@ -159,7 +143,6 @@ class PaymentService
 
     private function recordFailedPayment(Order $order, ?string $gatewayRef, string $reason): void
     {
-        // Status stays PENDING — customer can retry (FR-D03)
         $order->transactions()->create([
             'amount'      => $order->total_price,
             'type'        => TransactionType::PAYMENT->value,
@@ -171,15 +154,5 @@ class PaymentService
         ]);
 
         Log::warning('Payment failed', ['order_id' => $order->id, 'reason' => $reason]);
-    }
-
-    // ──────────────────────────────────────────────────────────────────────────
-    // Validate HMAC-SHA256 signature from payment gateway (API-01)
-    // ──────────────────────────────────────────────────────────────────────────
-    public function validateGatewaySignature(string $payload, string $receivedSignature): bool
-    {
-        $secret   = config('services.payment_gateway.webhook_secret');
-        $expected = hash_hmac('sha256', $payload, $secret);
-        return hash_equals($expected, $receivedSignature);
     }
 }

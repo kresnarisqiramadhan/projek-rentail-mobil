@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum PaymentMethod: string
 {
-    case GATEWAY = 'gateway';
-    case MANUAL  = 'manual';
+    case BANK = 'bank';
+    case QRIS  = 'qris';
 }

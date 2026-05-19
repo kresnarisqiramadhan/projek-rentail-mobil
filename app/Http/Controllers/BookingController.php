@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\OrderStatus;
-use App\Exceptions\InvalidStatusTransitionException;
 use App\Exceptions\VehicleNotAvailableException;
 use App\Http\Requests\Booking\CreateBookingRequest;
 use App\Http\Requests\Booking\ModifyBookingDatesRequest;
@@ -22,9 +20,6 @@ class BookingController extends Controller
         private readonly BookingService $bookingService
     ) {}
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-C04: Customer active orders
-    // ──────────────────────────────────────────────────────────────────────────
     public function index(Request $request): View
     {
         $orders = Order::with(['vehicle', 'vehicle.photos'])
@@ -36,9 +31,6 @@ class BookingController extends Controller
         return view('bookings.index', compact('orders'));
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-C05: Customer order history
-    // ──────────────────────────────────────────────────────────────────────────
     public function history(Request $request): View
     {
         $orders = Order::with(['vehicle', 'rating'])
@@ -50,9 +42,6 @@ class BookingController extends Controller
         return view('bookings.history', compact('orders'));
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-C04: Order detail
-    // ──────────────────────────────────────────────────────────────────────────
     public function show(Request $request, Order $order): View
     {
         $this->authorizeOrderOwnership($order, $request->user()->id);
@@ -62,9 +51,22 @@ class BookingController extends Controller
         return view('bookings.show', compact('order'));
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-C01: Create booking
-    // ──────────────────────────────────────────────────────────────────────────
+    public function checkout(Request $request, ?Order $order = null): View
+    {
+        if ($order) {
+            $this->authorizeOrderOwnership($order, $request->user()->id);
+        }
+
+        return view('checkout', compact('order'));
+    }
+
+    public function payment(Request $request, Order $order): View
+    {
+        $this->authorizeOrderOwnership($order, $request->user()->id);
+
+        return view('payment', compact('order'));
+    }
+
     public function store(CreateBookingRequest $request): RedirectResponse
     {
         try {
@@ -73,10 +75,7 @@ class BookingController extends Controller
                 $request->validated()
             );
 
-            return redirect()
-                ->route('bookings.show', $order)
-                ->with('success', 'Pesanan berhasil dibuat! Selesaikan pembayaran dalam 15 menit.');
-
+            return redirect()->route('payment', $order)->with('success', 'Pesanan berhasil dibuat! Selesaikan pembayaran dalam 15 menit.');
         } catch (VehicleNotAvailableException $e) {
             return back()->withErrors(['vehicle_id' => $e->getMessage()]);
         } catch (\InvalidArgumentException $e) {
@@ -84,9 +83,6 @@ class BookingController extends Controller
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-C02: Customer cancel booking
-    // ──────────────────────────────────────────────────────────────────────────
     public function cancel(Request $request, Order $order): RedirectResponse
     {
         $this->authorizeOrderOwnership($order, $request->user()->id);
@@ -99,9 +95,6 @@ class BookingController extends Controller
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-C03: Modify booking dates
-    // ──────────────────────────────────────────────────────────────────────────
     public function modifyDates(ModifyBookingDatesRequest $request, Order $order): RedirectResponse
     {
         $this->authorizeOrderOwnership($order, $request->user()->id);
@@ -122,9 +115,6 @@ class BookingController extends Controller
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-D02: Upload payment proof (manual)
-    // ──────────────────────────────────────────────────────────────────────────
     public function uploadPaymentProof(UploadPaymentProofRequest $request, Order $order): RedirectResponse
     {
         $this->authorizeOrderOwnership($order, $request->user()->id);
@@ -142,9 +132,6 @@ class BookingController extends Controller
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-D06: Request refund
-    // ──────────────────────────────────────────────────────────────────────────
     public function requestRefund(RequestRefundRequest $request, Order $order): RedirectResponse
     {
         $this->authorizeOrderOwnership($order, $request->user()->id);
@@ -162,9 +149,6 @@ class BookingController extends Controller
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-C08: Submit rating
-    // ──────────────────────────────────────────────────────────────────────────
     public function submitRating(SubmitRatingRequest $request, Order $order): RedirectResponse
     {
         $this->authorizeOrderOwnership($order, $request->user()->id);
@@ -182,10 +166,6 @@ class BookingController extends Controller
             return back()->withErrors(['rating' => $e->getMessage()]);
         }
     }
-
-    // ──────────────────────────────────────────────────────────────────────────
-    // Private Helpers
-    // ──────────────────────────────────────────────────────────────────────────
 
     private function authorizeOrderOwnership(Order $order, int $userId): void
     {

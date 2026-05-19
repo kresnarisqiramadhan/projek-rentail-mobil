@@ -4,9 +4,6 @@ namespace App\Http\Requests\Payment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * RequestRefundRequest — VR-05 enforced in BookingService
- */
 class RequestRefundRequest extends FormRequest
 {
     public function authorize(): bool

@@ -43,8 +43,6 @@ class Order extends Model
         ];
     }
 
-    // ── Relations ──────────────────────────────────────────
-
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -64,8 +62,6 @@ class Order extends Model
     {
         return $this->hasOne(Rating::class);
     }
-
-    // ── Scopes ────────────────────────────────────────────
 
     public function scopeActive(Builder $query): Builder
     {
@@ -99,49 +95,31 @@ class Order extends Model
                      ->where('payment_timeout_at', '<=', now());
     }
 
-    // ── Helpers ────────────────────────────────────────────
-
-    /**
-     * Whether payment is still within the 15-minute window (VR-04)
-     */
     public function isPaymentTimerActive(): bool
     {
         return $this->status === OrderStatus::PENDING
             && $this->payment_timeout_at->isFuture();
     }
 
-    /**
-     * Rental duration in days (VR-03)
-     */
     public function getDurationDaysAttribute(): int
     {
         return $this->start_date->diffInDays($this->end_date);
     }
 
-    /**
-     * Whether customer can cancel this order (FR-C02)
-     */
     public function canBeCancelledByCustomer(): bool
     {
         return in_array($this->status, [OrderStatus::PENDING, OrderStatus::PAID])
             && $this->start_date->isFuture();
     }
 
-    /**
-     * Whether customer can modify dates (FR-C03)
-     */
     public function canModifyDates(): bool
     {
         return in_array($this->status, [OrderStatus::PENDING, OrderStatus::PAID])
             && $this->start_date->isFuture();
     }
 
-    /**
-     * Whether refund can be requested (VR-05)
-     */
     public function canRequestRefund(): bool
     {
-        // Must be CANCELLED, must have had a PAID transaction, must be before start date
         if ($this->status !== OrderStatus::CANCELLED) {
             return false;
         }
@@ -154,9 +132,6 @@ class Order extends Model
             ->exists();
     }
 
-    /**
-     * Generate readable order code: ORD-YYYYMMDD-XXXX
-     */
     public static function generateOrderCode(): string
     {
         $date   = now()->format('Ymd');

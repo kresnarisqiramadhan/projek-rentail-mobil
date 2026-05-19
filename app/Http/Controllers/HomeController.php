@@ -2,22 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use LuxeDrive\Core\Services\VehicleService;
+use App\Models\Vehicle;
 
 class HomeController extends Controller
 {
-    protected $vehicleService;
-
-    public function __construct(VehicleService $vehicleService)
-    {
-        $this->vehicleService = $vehicleService;
-    }
-
     public function index()
     {
-        $vehicles = $this->vehicleService->getAllVehicles();
-        
+        $vehicles = Vehicle::active()
+            ->with(['photos' => fn($q) => $q->orderBy('sort_order')])
+            ->latest()
+            ->take(6)
+            ->get();
+
         return view('home', compact('vehicles'));
     }
 }

@@ -7,10 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * CheckActiveAccount
- * Blocks non-active users from accessing the system (FR-F03, BRL-17, TC-A02-05).
- */
 class CheckActiveAccount
 {
     public function handle(Request $request, Closure $next): Response

@@ -25,8 +25,6 @@ class Rating extends Model
         ];
     }
 
-    // ── Relations ──────────────────────────────────────────
-
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
@@ -42,11 +40,8 @@ class Rating extends Model
         return $this->belongsTo(Vehicle::class);
     }
 
-    // ── Observers ─────────────────────────────────────────
-
     protected static function booted(): void
     {
-        // Recalculate vehicle avg_rating whenever a rating is deleted
         static::deleted(function (Rating $rating) {
             $rating->vehicle->recalculateAvgRating();
         });

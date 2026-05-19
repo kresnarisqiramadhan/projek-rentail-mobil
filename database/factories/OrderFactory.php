@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Vehicle;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class OrderFactory extends Factory
 {
@@ -22,20 +23,18 @@ class OrderFactory extends Factory
         $totalPrice = $vehicle->price_per_day * $days;
 
         return [
-            'order_code'         => Order::generateOrderCode(),
+            'order_code'         => 'ORD-' . date('Ymd') . '-' . strtoupper(Str::random(6)),
             'user_id'            => User::factory(),
             'vehicle_id'         => $vehicle->id,
             'start_date'         => $startDate,
             'end_date'           => $endDate,
-            'total_price'        => $totalPrice,
+            'total_price'        => round($totalPrice, 2),
             'status'             => OrderStatus::PENDING,
-            'payment_method'     => fake()->randomElement([PaymentMethod::GATEWAY->value, PaymentMethod::MANUAL->value]),
+            'payment_method'     => fake()->randomElement([PaymentMethod::BANK->value, PaymentMethod::QRIS->value]),
             'payment_timeout_at' => now()->addMinutes(15),
             'payment_proof'      => null,
         ];
     }
-
-    // ── State shortcuts for test scenarios (STD) ──────────
 
     public function pending(): static
     {
@@ -101,9 +100,6 @@ class OrderFactory extends Factory
         return $this->state(['status' => OrderStatus::REFUNDED]);
     }
 
-    /**
-     * Expired — timer has passed, still PENDING (triggers auto-cancel)
-     */
     public function expired(): static
     {
         return $this->state([
@@ -125,13 +121,13 @@ class OrderFactory extends Factory
         ]);
     }
 
-    public function withManualPayment(): static
+    public function withBankPayment(): static
     {
-        return $this->state(['payment_method' => PaymentMethod::MANUAL->value]);
+        return $this->state(['payment_method' => PaymentMethod::Bank->value]);
     }
 
-    public function withGatewayPayment(): static
+    public function withQrisPayment(): static
     {
-        return $this->state(['payment_method' => PaymentMethod::GATEWAY->value]);
+        return $this->state(['payment_method' => PaymentMethod::QRIS->value]);
     }
 }
