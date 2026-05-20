@@ -19,6 +19,7 @@ class User extends Authenticatable
         'role',
         'is_active',
         'profile_photo',
+        'google_id',
     ];
 
     protected $hidden = [
@@ -36,8 +37,6 @@ class User extends Authenticatable
         ];
     }
 
-    // ── Relations ──────────────────────────────────────────
-
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class);
@@ -47,8 +46,6 @@ class User extends Authenticatable
     {
         return $this->hasMany(Rating::class);
     }
-
-    // ── Helpers ────────────────────────────────────────────
 
     public function isAdmin(): bool
     {

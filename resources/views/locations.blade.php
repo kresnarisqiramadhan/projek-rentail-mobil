@@ -1,8 +1,8 @@
 <x-layout>
     <div class="max-w-[1440px] mx-auto pt-16 pb-32 px-6 md:px-12 min-h-screen">
         <div class="mb-20">
-            <h1 class="text-5xl font-display text-zinc-900 dark:text-zinc-50 font-bold tracking-tight mb-4">Our Locations</h1>
-            <p class="text-zinc-500 dark:text-zinc-400 text-xl font-light max-w-2xl">LuxeDrive operates in major global hubs, providing seamless luxury transportation wherever you land.</p>
+            <h1 class="text-5xl font-display text-zinc-900 dark:text-zinc-50 font-bold tracking-tight mb-4">{{ __('Our Locations') }}</h1>
+            <p class="text-zinc-500 dark:text-zinc-400 text-xl font-light max-w-2xl">{{ __('LuxeDrive operates in major global hubs, providing seamless luxury transportation wherever you land.') }}</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">

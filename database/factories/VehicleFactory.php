@@ -9,22 +9,33 @@ class VehicleFactory extends Factory
 {
     protected $model = Vehicle::class;
 
-    private static array $types = ['MPV', 'SUV', 'Sedan', 'Hatchback', 'Pickup'];
-
     private static array $brands = [
-        'Toyota Avanza', 'Toyota Innova', 'Honda Jazz', 'Honda CRV',
-        'Mitsubishi Xpander', 'Daihatsu Xenia', 'Suzuki Ertiga',
-        'Nissan Livina', 'Mazda CX-5', 'Ford Ranger',
+        'Toyota' => ['Avanza', 'Innova', 'Fortuner', 'Rush', 'Agya'],
+        'Daihatsu' => ['Xenia', 'Terios', 'Ayla', 'Rocky'],
+        'Honda' => ['CR-V', 'BR-V', 'Mobilio', 'City'],
+        'Mitsubishi' => ['Xpander', 'Pajero Sport'],
+        'Suzuki' => ['Ertiga', 'XL7', 'Baleno'],
+        'Wuling' => ['Confero', 'Almaz', 'Cortez'],
+        'Hyundai' => ['Stargazer', 'Creta', 'Palisade'],
+        'Nissan' => ['Livina', 'X-Trail', 'March'],
     ];
 
     public function definition(): array
     {
+        $brand = fake()->randomElement(array_keys(self::$brands));
+        $model = fake()->randomElement(self::$brands[$brand]);
+        $year  = fake()->year();
+
         return [
-            'name'          => fake()->randomElement(self::$brands) . ' ' . fake()->year(),
-            'type'          => fake()->randomElement(self::$types),
+            'name'          => $brand . ' ' . $model . ' ' . $year,
+            'brand'         => $brand,
+            'model'         => $model,
+            'year'         => $year,
+            'type'          => fake()->randomElement(['MPV', 'SUV', 'Sedan', 'Hatchback', 'Pickup']),
             'plate_number'  => 'B ' . fake()->unique()->numerify('####') . ' ' . strtoupper(fake()->lexify('???')),
             'price_per_day' => fake()->randomElement([200000, 250000, 300000, 350000, 400000, 500000]),
             'condition'     => fake()->sentence(10),
+            'seats'         => fake()->randomElement([5, 7, 8]),
             'avg_rating'    => 0.00,
             'is_active'     => true,
         ];

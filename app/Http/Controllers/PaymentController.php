@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Services\BookingService;
 use App\Services\PaymentService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -12,31 +14,72 @@ use Illuminate\View\View;
 class PaymentController extends Controller
 {
     public function __construct(
-        private readonly PaymentService $paymentService
+        private readonly PaymentService $paymentService,
+        private readonly BookingService $bookingService
     ) {}
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-D01: Halaman pembayaran order
-    // ──────────────────────────────────────────────────────────────────────────
-    public function show(Request $request, Order $order): View|\Illuminate\Http\RedirectResponse
+    public function show(Order $order): View|\Illuminate\Http\RedirectResponse
     {
-        if ($order->user_id !== $request->user()->id) {
+        if ($order->user_id !== auth()->id()) {
             abort(403);
         }
 
-        // VR-04: Timer must be active
         if (!$order->isPaymentTimerActive()) {
-            return redirect()->route('bookings.show', $order)
-                ->withErrors(['payment' => 'Batas waktu pembayaran telah habis. Silakan buat pesanan baru.']);
+            return redirect()->route('orders.show', $order)
+                ->withErrors(['payment' => 'Batas waktu pembayaran telah habis.']);
         }
 
-        return view('payment.show', compact('order'));
+        return view('payment', compact('order'));
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // FR-D01: Payment Gateway Callback (Webhook)
-    // API-01, API-02: Signature already validated by VerifyPaymentSignature middleware
-    // ──────────────────────────────────────────────────────────────────────────
+    public function uploadProof(Request $request, Order $order): RedirectResponse
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'payment_proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
+        ]);
+
+        try {
+            $this->bookingService->uploadPaymentProof(
+                $order,
+                auth()->user(),
+                $request->file('payment_proof')
+            );
+
+            return back()->with('success', 'Bukti pembayaran berhasil diunggah. Menunggu verifikasi admin.');
+        } catch (\RuntimeException $e) {
+            return back()->withErrors(['payment_proof' => $e->getMessage()]);
+        }
+    }
+
+    public function requestRefund(Request $request, Order $order): RedirectResponse
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'bank_name'      => 'required|string|max:100',
+            'account_name'   => 'required|string|max:255',
+            'account_number' => 'required|string|max:50',
+        ]);
+
+        try {
+            $this->bookingService->requestRefund(
+                $order,
+                auth()->user(),
+                $validated
+            );
+
+            return back()->with('success', 'Permintaan refund berhasil diajukan.');
+        } catch (\RuntimeException $e) {
+            return back()->withErrors(['refund' => $e->getMessage()]);
+        }
+    }
+
     public function callback(Request $request): JsonResponse
     {
         $payload = $request->all();

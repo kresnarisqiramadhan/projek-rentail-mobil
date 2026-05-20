@@ -13,7 +13,6 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    // Immutable audit log — no updated_at
     public $timestamps = false;
     const CREATED_AT = 'created_at';
 
@@ -41,7 +40,6 @@ class Transaction extends Model
 
     protected static function booted(): void
     {
-        // Prevent any UPDATE on transaction records — immutable audit log (FR-D05)
         static::updating(function () {
             throw new \LogicException('Transaction records are immutable and cannot be updated.');
         });
