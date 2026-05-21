@@ -4,10 +4,6 @@ namespace App\Http\Requests\Payment;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * UploadPaymentProofRequest
- * Enforces VR-06: JPG/JPEG/PNG/PDF, max 5 MB
- */
 class UploadPaymentProofRequest extends FormRequest
 {
     public function authorize(): bool
@@ -21,8 +17,8 @@ class UploadPaymentProofRequest extends FormRequest
             'payment_proof' => [
                 'required',
                 'file',
-                'mimes:jpg,jpeg,png,pdf', // VR-06: whitelist formats
-                'max:5120',               // VR-06: max 5 MB (5120 KB)
+                'mimes:jpg,jpeg,png,pdf',
+                'max:5120',
             ],
         ];
     }

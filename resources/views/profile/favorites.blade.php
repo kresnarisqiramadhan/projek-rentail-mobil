@@ -1,7 +1,7 @@
 <x-profile-layout>
     <div class="mb-8">
-        <h1 class="text-3xl font-display text-zinc-900 dark:text-zinc-50 font-bold tracking-tight">Favorite Vehicles</h1>
-        <p class="text-zinc-500 dark:text-zinc-400 mt-1">Vehicles you've saved for your future journeys.</p>
+        <h1 class="text-3xl font-display text-zinc-900 dark:text-zinc-50 font-bold tracking-tight">{{ __('Favorite Vehicles') }}</h1>
+        <p class="text-zinc-500 dark:text-zinc-400 mt-1">{{ __("Vehicles you've saved for later.") }}</p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -25,10 +25,10 @@
                 <div class="text-xs text-zinc-500 mb-6 italic uppercase tracking-wider">Coupe • Alpine White</div>
                 <div class="flex items-center justify-between mt-auto pt-4 border-t border-zinc-50 dark:border-zinc-800">
                     <div>
-                        <div class="text-sm font-black text-zinc-900 dark:text-zinc-50 italic">IDR 8,500,000</div>
-                        <div class="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">Per Day</div>
+                        <div class="text-sm font-black text-zinc-900 dark:text-zinc-50 italic">Rp8.500.000</div>
+                        <div class="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">Per Hari</div>
                     </div>
-                    <a href="{{ route('vehicles') }}" class="px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 text-[10px] font-black uppercase rounded-lg hover:opacity-90 transition-opacity">Rent Now</a>
+                    <a href="{{ route('vehicles') }}" class="px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 text-[10px] font-black uppercase rounded-lg hover:opacity-90 transition-opacity">Sewa Sekarang</a>
                 </div>
             </div>
         </div>
@@ -53,10 +53,10 @@
                 <div class="text-xs text-zinc-500 mb-6 italic uppercase tracking-wider">Sedan • Nardo Grey</div>
                 <div class="flex items-center justify-between mt-auto pt-4 border-t border-zinc-50 dark:border-zinc-800">
                     <div>
-                        <div class="text-sm font-black text-zinc-900 dark:text-zinc-50 italic">IDR 9,200,000</div>
-                        <div class="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">Per Day</div>
+                        <div class="text-sm font-black text-zinc-900 dark:text-zinc-50 italic">Rp9.200.000</div>
+                        <div class="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">Per Hari</div>
                     </div>
-                    <a href="{{ route('vehicles') }}" class="px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 text-[10px] font-black uppercase rounded-lg hover:opacity-90 transition-opacity">Rent Now</a>
+                    <a href="{{ route('vehicles') }}" class="px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 text-[10px] font-black uppercase rounded-lg hover:opacity-90 transition-opacity">Sewa Sekarang</a>
                 </div>
             </div>
         </div>

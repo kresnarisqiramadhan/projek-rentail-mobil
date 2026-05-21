@@ -8,10 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * VerifyPaymentSignature
- * Validates HMAC-SHA256 from payment gateway webhook (API-01, API-02, SAD §8.1).
- */
 class VerifyPaymentSignature
 {
     public function __construct(private readonly PaymentService $paymentService) {}

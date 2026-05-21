@@ -16,16 +16,14 @@ class TransactionFactory extends Factory
 
     public function definition(): array
     {
-        $order = Order::factory()->create();
-
         return [
-            'order_id'    => $order->id,
-            'amount'      => $order->total_price,
+            'order_id'    => Order::factory(),
+            'amount'      => 0,
             'type'        => TransactionType::PAYMENT,
             'status'      => TransactionStatus::SUCCESS,
-            'method'      => PaymentMethod::GATEWAY->value,
+            'method'      => PaymentMethod::BANK->value,
             'gateway_ref' => 'GW-' . strtoupper(fake()->bothify('??########')),
-            'actor'       => TransactionActor::GATEWAY,
+            'actor'       => TransactionActor::CUSTOMER,
             'notes'       => null,
         ];
     }
@@ -35,7 +33,7 @@ class TransactionFactory extends Factory
         return $this->state([
             'type'   => TransactionType::PAYMENT,
             'status' => TransactionStatus::SUCCESS,
-            'actor'  => TransactionActor::GATEWAY,
+            'actor'  => TransactionActor::CUSTOMER,
         ]);
     }
 
@@ -44,7 +42,7 @@ class TransactionFactory extends Factory
         return $this->state([
             'type'   => TransactionType::PAYMENT,
             'status' => TransactionStatus::FAILED,
-            'actor'  => TransactionActor::GATEWAY,
+            'actor'  => TransactionActor::CUSTOMER,
         ]);
     }
 
@@ -53,7 +51,7 @@ class TransactionFactory extends Factory
         return $this->state([
             'type'        => TransactionType::PAYMENT,
             'status'      => TransactionStatus::PENDING,
-            'method'      => PaymentMethod::MANUAL->value,
+            'method'      => PaymentMethod::BANK->value,
             'actor'       => TransactionActor::CUSTOMER,
             'gateway_ref' => null,
         ]);
@@ -64,7 +62,7 @@ class TransactionFactory extends Factory
         return $this->state([
             'type'   => TransactionType::PAYMENT,
             'status' => TransactionStatus::SUCCESS,
-            'method' => PaymentMethod::MANUAL->value,
+            'method' => PaymentMethod::BANK->value,
             'actor'  => TransactionActor::ADMIN,
         ]);
     }
