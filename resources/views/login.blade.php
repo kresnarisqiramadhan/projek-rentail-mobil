@@ -21,7 +21,7 @@
                 @csrf
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-4 block">Alamat Email</label>
-                    <input type="email" name="email" placeholder="user@gmail.com" value="{{ old('email') }}" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
+                    <input type="email" name="email" value="{{ old('email') }}" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
                 </div>
 
                 <div class="space-y-2">
@@ -29,7 +29,7 @@
                         <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block">Kata Sandi</label>
                         <a href="#" class="text-[10px] font-bold text-zinc-900 dark:text-zinc-50 uppercase tracking-widest hover:underline">Lupa?</a>
                     </div>
-                    <input type="password" name="password" placeholder="••••••••" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
+                    <input type="password" name="password" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
                 </div>
 
                 <div class="pt-4">

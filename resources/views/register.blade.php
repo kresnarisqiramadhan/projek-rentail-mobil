@@ -21,22 +21,22 @@
                 @csrf
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-4 block">Nama Lengkap</label>
-                    <input type="text" name="name" placeholder="Budi Santoso" value="{{ old('name') }}" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
+                    <input type="text" name="name" value="{{ old('name') }}" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-4 block">Alamat Email</label>
-                    <input type="email" name="email" placeholder="budisantoso@gmail.com" value="{{ old('email') }}" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
+                    <input type="email" name="email" value="{{ old('email') }}" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-4 block">Kata Sandi</label>
-                    <input type="password" name="password" placeholder="Min. 8 karakter, huruf & angka" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
+                    <input type="password" name="password" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
                 </div>
 
                 <div class="space-y-2">
                     <label class="text-[10px] font-bold text-zinc-400 uppercase tracking-widest ml-4 block">Konfirmasi Kata Sandi</label>
-                    <input type="password" name="password_confirmation" placeholder="••••••••" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
+                    <input type="password" name="password_confirmation" class="w-full h-14 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full px-6 text-sm outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
                 </div>
 
                 <div class="pt-4">

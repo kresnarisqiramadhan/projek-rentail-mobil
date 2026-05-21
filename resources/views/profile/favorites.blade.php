@@ -6,7 +6,7 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Car Card 1 -->
-        <div class="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-500">
+        <div class="bg-white dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 rounded-3xl overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-500">
             <div class="relative h-48 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2000&auto=format&fit=crop" 
                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Car">
@@ -23,18 +23,18 @@
                     </div>
                 </div>
                 <div class="text-xs text-zinc-500 mb-6 italic uppercase tracking-wider">Coupe • Alpine White</div>
-                <div class="flex items-center justify-between mt-auto pt-4 border-t border-zinc-50 dark:border-zinc-800">
+                <div class="flex items-center justify-between mt-auto pt-4 border-t border-zinc-100 dark:border-zinc-900">
                     <div>
                         <div class="text-sm font-black text-zinc-900 dark:text-zinc-50 italic">Rp8.500.000</div>
-                        <div class="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">Per Hari</div>
+                        <div class="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">{{ __('Per Day') }}</div>
                     </div>
-                    <a href="{{ route('vehicles') }}" class="px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 text-[10px] font-black uppercase rounded-lg hover:opacity-90 transition-opacity">Sewa Sekarang</a>
+                    <a href="{{ route('vehicles') }}" class="px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 text-[10px] font-black uppercase rounded-lg hover:opacity-90 transition-opacity">{{ __('Rent Now') }}</a>
                 </div>
             </div>
         </div>
 
         <!-- Car Card 2 -->
-        <div class="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-500">
+        <div class="bg-white dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800 rounded-3xl overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-500">
             <div class="relative h-48 overflow-hidden">
                 <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?q=80&w=2000&auto=format&fit=crop" 
                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Car">
@@ -51,12 +51,12 @@
                     </div>
                 </div>
                 <div class="text-xs text-zinc-500 mb-6 italic uppercase tracking-wider">Sedan • Nardo Grey</div>
-                <div class="flex items-center justify-between mt-auto pt-4 border-t border-zinc-50 dark:border-zinc-800">
+                <div class="flex items-center justify-between mt-auto pt-4 border-t border-zinc-100 dark:border-zinc-900">
                     <div>
                         <div class="text-sm font-black text-zinc-900 dark:text-zinc-50 italic">Rp9.200.000</div>
-                        <div class="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">Per Hari</div>
+                        <div class="text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">{{ __('Per Day') }}</div>
                     </div>
-                    <a href="{{ route('vehicles') }}" class="px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 text-[10px] font-black uppercase rounded-lg hover:opacity-90 transition-opacity">Sewa Sekarang</a>
+                    <a href="{{ route('vehicles') }}" class="px-4 py-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 text-[10px] font-black uppercase rounded-lg hover:opacity-90 transition-opacity">{{ __('Rent Now') }}</a>
                 </div>
             </div>
         </div>
