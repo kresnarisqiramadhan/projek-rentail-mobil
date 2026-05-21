@@ -4,7 +4,7 @@
             <h1 class="text-4xl font-display text-zinc-900 dark:text-zinc-50 font-bold tracking-tight mb-8">{{ __('Search the Fleet') }}</h1>
             <div class="relative group">
                 <span class="material-symbols-outlined absolute left-6 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-zinc-900 dark:group-focus-within:text-zinc-50 transition-colors">search</span>
-                <input type="text" autofocus placeholder="Search by model, brand, or category..." class="w-full h-16 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-3xl pl-16 pr-6 text-lg outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all shadow-sm">
+                <input type="text" autofocus placeholder="{{ __('Search by model, brand, or category...') }}" class="w-full h-16 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-3xl pl-16 pr-6 text-lg outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all shadow-sm">
             </div>
         </div>
 

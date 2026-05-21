@@ -10,25 +10,25 @@
                         </div>
                         <div>
                             <div class="text-white font-semibold">{{ auth()->user()->name }}</div>
-                            <div class="text-zinc-500 text-xs">{{ auth()->user()->isAdmin() ? 'Administrator' : 'Pelanggan' }}</div>
+                            <div class="text-zinc-500 text-xs">{{ auth()->user()->isAdmin() ? __('Administrator') : __('Customer') }}</div>
                         </div>
                     </div>
                     <nav class="space-y-1">
                         <a href="{{ route('profile') }}" class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('profile') ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-800' }} rounded-xl transition-colors">
                             <span class="material-symbols-outlined text-sm">dashboard</span>
-                            <span class="text-sm font-medium">Dasbor</span>
+                            <span class="text-sm font-medium">{{ __('Dashboard') }}</span>
                         </a>
                         <a href="{{ route('profile.rentals') }}" class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('profile.rentals') ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-800' }} rounded-xl transition-colors">
                             <span class="material-symbols-outlined text-sm">history</span>
-                            <span class="text-sm font-medium">Riwayat Sewa</span>
+                            <span class="text-sm font-medium">{{ __('Rental History') }}</span>
                         </a>
                         <a href="{{ route('profile.favorites') }}" class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('profile.favorites') ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-800' }} rounded-xl transition-colors">
                             <span class="material-symbols-outlined text-sm">favorite</span>
-                            <span class="text-sm font-medium">Favorit</span>
+                            <span class="text-sm font-medium">{{ __('Favorites') }}</span>
                         </a>
                         <a href="{{ route('profile.settings') }}" class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('profile.settings') ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:text-white hover:bg-zinc-800' }} rounded-xl transition-colors">
                             <span class="material-symbols-outlined text-sm">settings</span>
-                            <span class="text-sm font-medium">Pengaturan</span>
+                            <span class="text-sm font-medium">{{ __('Settings') }}</span>
                         </a>
                     </nav>
                 </div>

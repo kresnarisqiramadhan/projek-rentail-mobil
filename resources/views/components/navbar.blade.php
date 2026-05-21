@@ -1,8 +1,14 @@
 <nav class="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl docked full-width top-0 sticky z-50 border-b border-zinc-100/50 dark:border-zinc-800/50 shadow-[0_4px_30px_rgba(0,0,0,0.03)]">
     <div class="flex justify-between items-center h-16 px-6 md:px-12 max-w-[1440px] mx-auto">
-        <!-- Logo (Left) -->
-        <div class="flex-shrink-0">
+        <!-- Logo & Search Box (Left) -->
+        <div class="flex-shrink-0 flex items-center gap-6">
             <a href="{{ route('home') }}" class="text-xl font-semibold tracking-tighter text-zinc-900 dark:text-zinc-50">LuxeDrive</a>
+            
+            <!-- Search Box -->
+            <div class="relative hidden lg:flex items-center group">
+                <span class="material-symbols-outlined absolute left-3 text-zinc-400 group-focus-within:text-zinc-900 dark:group-focus-within:text-zinc-50 transition-colors text-[18px]">search</span>
+                <input type="text" placeholder="{{ __('Search fleet...') }}" class="pl-10 pr-4 py-1.5 w-48 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full text-xs outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
+            </div>
         </div>
 
         <!-- Navigation Links (Center) -->
@@ -13,15 +19,9 @@
             <a class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors" href="{{ route('support') }}">{{ __('Support') }}</a>
         </div>
 
-        <!-- Search & Auth (Right) -->
-        <div class="flex items-center gap-6">
-            <!-- Search Box -->
-            <div class="relative hidden lg:flex items-center group">
-                <span class="material-symbols-outlined absolute left-3 text-zinc-400 group-focus-within:text-zinc-900 dark:group-focus-within:text-zinc-50 transition-colors text-[18px]">search</span>
-                <input type="text" placeholder="{{ __('Search fleet...') }}" class="pl-10 pr-4 py-1.5 w-48 bg-zinc-50 dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 rounded-full text-xs outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-50 transition-all">
-            </div>
-
-            <!-- Auth / User Manu -->
+        <!-- Auth & Language Switcher (Right) -->
+        <div class="flex items-center gap-4">
+            <!-- Auth / User Menu -->
             <div class="flex items-center space-x-2">
                 @auth
                     <a href="{{ route('profile') }}" class="px-4 py-2 text-xs font-medium text-zinc-900 dark:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all">
@@ -37,6 +37,12 @@
                     <a href="{{ route('login') }}" class="px-4 py-2 text-xs font-medium text-zinc-900 dark:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-all">{{ __('Login') }}</a>
                     <a href="{{ route('register') }}" class="px-4 py-2 text-xs font-medium bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 rounded-full hover:opacity-90 transition-all shadow-sm">{{ __('Register') }}</a>
                 @endauth
+            </div>
+
+            <!-- Language Switcher -->
+            <div class="flex items-center h-6 bg-zinc-100 dark:bg-zinc-800 p-0.5 rounded-full text-[10px] font-semibold">
+                <a href="{{ route('lang.switch', 'id') }}" class="h-5 flex items-center px-2.5 rounded-full transition-all {{ app()->getLocale() == 'id' ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200' }}">ID</a>
+                <a href="{{ route('lang.switch', 'en') }}" class="h-5 flex items-center px-2.5 rounded-full transition-all {{ app()->getLocale() == 'en' ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white shadow-sm' : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200' }}">EN</a>
             </div>
         </div>
     </div>
