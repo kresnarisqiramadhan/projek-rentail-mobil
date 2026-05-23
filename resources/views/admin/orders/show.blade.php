@@ -77,7 +77,9 @@
             @if($order->payment_proof)
             <div class="bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-2xl p-6">
                 <h3 class="font-semibold text-zinc-900 dark:text-zinc-50 mb-4">Bukti Pembayaran</h3>
-                <a href="{{ asset('storage/' . $order->payment_proof) }}" target="_blank" class="text-blue-600 underline text-sm">Lihat Bukti</a>
+                <a href="{{ route('admin.orders.payment-proof', $order) }}" target="_blank" class="text-blue-600 underline text-sm">
+                    Lihat Bukti
+                </a>
             </div>
             @endif
         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class VehicleController extends Controller
 {
@@ -77,4 +78,34 @@ class VehicleController extends Controller
 
         return view('search', compact('vehicles'));
     }
+
+    public function toggleFavorite(
+        Request $request,
+        Vehicle $vehicle
+    ): RedirectResponse {
+        $user = $request->user();
+
+        $existing = $user->favorites()
+            ->where('vehicle_id', $vehicle->id)
+            ->first();
+
+        if ($existing) {
+            $existing->delete();
+
+            return back()->with(
+                'success',
+                'Dihapus dari favorit.'
+            );
+        }
+
+        $user->favorites()->create([
+            'vehicle_id' => $vehicle->id
+        ]);
+
+        return back()->with(
+            'success',
+            'Ditambahkan ke favorit.'
+        );
+    }
+
 }

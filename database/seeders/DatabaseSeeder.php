@@ -83,7 +83,7 @@ class DatabaseSeeder extends Seeder
             'amount' => $completed->total_price,
         ]);
 
-        Rating::factory()->forOrder($completed)->withScore(4)->create();
+        $rating1 = Rating::factory()->forOrder($completed)->withScore(4)->create();
 
         $rated = Order::factory()
             ->for($customer)
@@ -95,7 +95,7 @@ class DatabaseSeeder extends Seeder
             'amount' => $rated->total_price,
         ]);
 
-        Rating::factory()->forOrder($rated)->withScore(5)->create();
+        $rating2 = Rating::factory()->forOrder($rated)->withScore(5)->create();
 
         $cancelled = Order::factory()
             ->for($customer)
@@ -126,6 +126,28 @@ class DatabaseSeeder extends Seeder
         Transaction::factory()->refund()->for($refunded, 'order')->create([
             'amount' => $refunded->total_price,
         ]);
+
+        // Tambahkan favorit untuk customer
+        $customer->favorites()->create([
+            'vehicle_id' => $vehicles->random()->id,
+        ]);
+
+        // Tambahkan like/dislike untuk rating yang sudah dibuat
+        $ratingA = Rating::inRandomOrder()->first();
+        if ($ratingA && !$ratingA->votes()->where('user_id', $customer->id)->exists()) {
+            $ratingA->votes()->create([
+                'user_id' => $customer->id,
+                'type'    => 'like',
+            ]);
+        }
+
+        $ratingB = Rating::inRandomOrder()->where('id', '!=', $ratingA->id ?? 0)->first();
+        if ($ratingB && !$ratingB->votes()->where('user_id', $customer->id)->exists()) {
+            $ratingB->votes()->create([
+                'user_id' => $customer->id,
+                'type'    => 'dislike',
+            ]);
+        }
 
         $now = now();
 

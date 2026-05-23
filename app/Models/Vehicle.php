@@ -46,6 +46,17 @@ class Vehicle extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function favoritedBy(): HasMany
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function isFavoritedBy(?User $user): bool
+    {
+        if (!$user) return false;
+        return $this->favoritedBy()->where('user_id', $user->id)->exists();
+    }
+
     public function ratings(): HasMany
     {
         return $this->hasMany(Rating::class);
