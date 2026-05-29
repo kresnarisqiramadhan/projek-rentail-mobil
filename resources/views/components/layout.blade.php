@@ -113,6 +113,13 @@
 
     <main class="flex-grow">
         {{ $slot }}
+    @if(session('success'))
+        <div class="max-w-[1440px] mx-auto px-6 md:px-12 pt-4">
+            <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl p-4 text-sm">
+                {{ session('success') }}
+            </div>
+        </div>
+    @endif
     </main>
 
     <x-footer />

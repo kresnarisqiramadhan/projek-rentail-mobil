@@ -121,31 +121,64 @@
                 @if($vehicle->ratings->isNotEmpty())
                 <div class="border-t border-zinc-100 dark:border-zinc-800 pt-8">
                     <h3 class="text-xs font-bold text-zinc-400 uppercase tracking-[0.2em] mb-6">Ulasan Terbaru</h3>
-                    <div class="space-y-6 max-h-80 overflow-y-auto pr-2">
+                    <div class="space-y-6 max-h-96 overflow-y-auto pr-2">
                         @foreach($vehicle->ratings as $rating)
                         <div class="flex gap-4">
                             <div class="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-700 flex items-center justify-center text-xs font-bold text-zinc-500 flex-shrink-0">
                                 {{ substr($rating->user->name ?? 'U', 0, 1) }}
                             </div>
-                            <div class="flex-1">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <span class="text-sm font-medium text-zinc-900 dark:text-zinc-50">{{ $rating->user->name ?? 'Anonim' }}</span>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-sm font-medium text-zinc-900 dark:text-zinc-50">{{ $rating->user->name ?? 'Anonim' }}</span>
                                     <div class="flex items-center">
-                                        @for($i=1; $i<=5; $i++)
-                                            <span class="material-symbols-outlined text-sm {{ $i <= $rating->score ? 'text-yellow-500' : 'text-zinc-300' }}">star</span>
-                                        @endfor
-                                    </div>
-                                    <span class="text-xs text-zinc-400">{{ $rating->created_at->diffForHumans() }}</span>
+                                    @for($i=1; $i<=5; $i++)
+                                        <span class="material-symbols-outlined text-sm {{ $i <= $rating->score ? 'text-yellow-500' : 'text-zinc-300' }}">star</span>
+                                    @endfor
+                            </div>
+                                <span class="text-xs text-zinc-400">{{ $rating->created_at->diffForHumans() }}</span>
+                            </div>
+                            @if($rating->comment)
+                            <p class="text-sm text-zinc-600 dark:text-zinc-400 font-light">{{ $rating->comment }}</p>
+                            @endif
+                                @auth
+                                <div class="flex items-center gap-3 mt-2">
+                                    <form action="{{ route('rating.vote', $rating) }}" method="POST" class="inline">
+                                    @csrf
+                                    <input type="hidden" name="type" value="like">
+                                    <button type="submit" class="flex items-center gap-1 text-xs {{ $rating->getUserVote(auth()->user()) === 'like' ? 'text-blue-600' : 'text-zinc-400 hover:text-blue-600' }} transition-colors">
+                                       <span class="material-symbols-outlined text-sm">thumb_up</span>
+                                       <span>{{ $rating->likes->count() }}</span>
+                                    </button>
+                                    </form>
+                                    <form action="{{ route('rating.vote', $rating) }}" method="POST" class="inline">
+                                        @csrf
+                                        <input type="hidden" name="type" value="dislike">
+                                        <button type="submit" class="flex items-center gap-1 text-xs {{ $rating->getUserVote(auth()->user()) === 'dislike' ? 'text-red-600' : 'text-zinc-400 hover:text-red-600' }} transition-colors">
+                                            <span class="material-symbols-outlined text-sm">thumb_down</span>
+                                            <span>{{ $rating->dislikes->count() }}</span>
+                                        </button>
+                                    </form>
                                 </div>
-                                @if($rating->comment)
-                                <p class="text-sm text-zinc-600 dark:text-zinc-400 font-light">{{ $rating->comment }}</p>
-                                @endif
+                                @endauth
                             </div>
                         </div>
                         @endforeach
                     </div>
                 </div>
                 @endif
+
+
+                @auth
+                <div class="pt-2">
+                    <form action="{{ route('vehicle.favorite', $vehicle) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="flex items-center gap-2 px-6 py-3 border {{ $vehicle->isFavoritedBy(auth()->user()) ? 'bg-red-50 border-red-200 text-red-600' : 'border-zinc-200 dark:border-zinc-700 text-zinc-500' }} rounded-xl text-sm font-medium hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+                        <span class="material-symbols-outlined text-lg">{{ $vehicle->isFavoritedBy(auth()->user()) ? 'favorite' : 'favorite_border' }}</span>
+                        {{ $vehicle->isFavoritedBy(auth()->user()) ? 'Favorit' : 'Tambah Favorit' }}
+                        </button>
+                    </form>
+                </div>
+                @endauth
 
                 <!-- Tombol Pesan -->
                 <div class="pt-6">

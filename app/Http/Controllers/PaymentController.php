@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PaymentController extends Controller
@@ -18,7 +19,7 @@ class PaymentController extends Controller
         private readonly BookingService $bookingService
     ) {}
 
-    public function show(Order $order): View|\Illuminate\Http\RedirectResponse
+    public function show(Order $order): View|RedirectResponse
     {
         if ($order->user_id !== auth()->id()) {
             abort(403);
@@ -99,5 +100,20 @@ class PaymentController extends Controller
             ]);
             return response()->json(['status' => 'error', 'message' => 'Processing error'], 500);
         }
+    }
+
+    public function viewProof(Order $order): \Symfony\Component\HttpFoundation\BinaryFileResponse|RedirectResponse
+    {
+        if (!auth()->user()?->isAdmin()) {
+            abort(403);
+        }
+
+        if (!$order->payment_proof || !Storage::disk('private')->exists($order->payment_proof)) {
+            return back()->with('error', 'File bukti tidak ditemukan.');
+        }
+
+        return response()->file(
+            Storage::disk('private')->path($order->payment_proof)
+        );
     }
 }

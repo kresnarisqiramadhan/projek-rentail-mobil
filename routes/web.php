@@ -11,6 +11,7 @@ use App\Http\Controllers\{
     ProfileController,
     OrderController,
     NotificationController,
+    RatingController,
 };
 use App\Http\Controllers\Admin\{
     DashboardController as AdminDashboardController,
@@ -51,6 +52,12 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::get('/profile/rentals', [ProfileController::class, 'rentals'])->name('profile.rentals');
     Route::get('/profile/favorites', [ProfileController::class, 'favorites'])->name('profile.favorites');
     Route::get('/profile/settings', [ProfileController::class, 'settings'])->name('profile.settings');
+
+    // Favorites
+    Route::post('/vehicles/{vehicle}/favorite', [VehicleController::class, 'toggleFavorite'])->name('vehicle.favorite');
+
+    // Rating votes
+    Route::post('/ratings/{rating}/vote', [RatingController::class, 'vote'])->name('rating.vote');
 
     // Orders
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
@@ -98,6 +105,7 @@ Route::middleware(['auth', 'active', 'role:admin'])->prefix('admin')->name('admi
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::patch('/orders/{order}/verify-payment', [AdminOrderController::class, 'verifyPayment'])->name('orders.verify-payment');
     Route::patch('/orders/{order}/update-status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
+    Route::get('/orders/{order}/payment-proof', [PaymentController::class, 'viewProof'])->name('orders.payment-proof');
 
     // Reports & Charts
     Route::get('/reports', [AdminReportController::class, 'index'])->name('reports.index');
